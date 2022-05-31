@@ -5,6 +5,5 @@ import { Modules } from './modules/modules';
 @Module({
   imports: [Modules],
   controllers: [AppController],
-  providers: [],
 })
 export class AppModule {}

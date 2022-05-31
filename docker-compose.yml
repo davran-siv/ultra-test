@@ -1,0 +1,34 @@
+version: '3.7'
+
+services:
+  postgres:
+    container_name: ultra-postgres
+    image: postgres:14
+    environment:
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=ultra
+      - POSTGRES_USER=postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./data/database:/var/lib/postgresql/data
+    networks:
+      - webnet
+
+  core:
+    container_name: ultra-back
+    build: .
+    links:
+      - postgres
+    depends_on:
+      - postgres
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    ports:
+      - 7000:7000
+    networks:
+      - webnet
+
+networks:
+  webnet:

@@ -4,5 +4,6 @@ import { PublisherModule } from './publisher/publisher.module';
 
 @Module({
   imports: [GamesModule, PublisherModule],
+  exports: [GamesModule, PublisherModule],
 })
 export class Modules {}

@@ -7,7 +7,6 @@ import {
   Patch,
   Post,
   Query,
-  ValidationPipe,
 } from '@nestjs/common';
 import { GameCreateDto } from './modules/games/dtos/game-create.dto';
 import { GameFindManyRequestDto } from './modules/games/dtos/game-find-many-request.dto';
@@ -29,14 +28,7 @@ export class AppController {
 
   @Get()
   findMany(
-    @Query(
-      new ValidationPipe({
-        transform: true,
-        transformOptions: { enableImplicitConversion: true },
-        forbidNonWhitelisted: true,
-      }),
-    )
-    filters: GameFindManyRequestDto,
+    @Query() filters: GameFindManyRequestDto,
   ): Promise<PaginatedResponse<GameResponseDto>> {
     return this.gamesQueryService.findManyPaginated(filters);
   }
