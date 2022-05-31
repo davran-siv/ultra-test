@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PaginatedResponse } from '../../../shared/generics/paginated-response.generic';
-import { GameFindManyRequestDto } from '../dtos/game-find-many-request.dto';
-import { GameResponseDto } from '../dtos/game-response.dto';
-import { GamesRepository } from '../games.repository';
+import { PaginatedResponse } from '../../../../shared/generics/paginated-response.generic';
+import { GameFindManyRequestDto } from '../../dtos/game-find-many-request.dto';
+import { GameResponseDto } from '../../dtos/game-response.dto';
+import { GamesRepository } from '../../games.repository';
 
 @Injectable()
 export class GamesQueryService {
@@ -18,8 +18,8 @@ export class GamesQueryService {
     return game;
   }
 
-  async findManyPaginated(
-    filters: GameFindManyRequestDto,
+  async findAllPaginated(
+    filters: GameFindManyRequestDto = {},
   ): Promise<PaginatedResponse<GameResponseDto>> {
     return this.repository.findAllPaginated(filters);
   }

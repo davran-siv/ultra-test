@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { GamesRepository } from './games.repository';
-import { GamesMutationService } from './services/games-mutation.service';
-import { GamesQueryService } from './services/games-query.service';
+import { GamesMutationService } from './services/games-mutation/games-mutation.service';
+import { GamesQueryService } from './services/games-query/games-query.service';
 
 @Module({
   providers: [GamesMutationService, GamesQueryService, GamesRepository],

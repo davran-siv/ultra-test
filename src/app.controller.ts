@@ -7,13 +7,15 @@ import {
   Patch,
   Post,
   Query,
+  UsePipes,
 } from '@nestjs/common';
 import { GameCreateDto } from './modules/games/dtos/game-create.dto';
 import { GameFindManyRequestDto } from './modules/games/dtos/game-find-many-request.dto';
 import { GameResponseDto } from './modules/games/dtos/game-response.dto';
 import { GameUpdateDto } from './modules/games/dtos/game-update.dto';
-import { GamesMutationService } from './modules/games/services/games-mutation.service';
-import { GamesQueryService } from './modules/games/services/games-query.service';
+import { IsGameExistsPipe } from './modules/games/interceptors/is-game-exists.pipe';
+import { GamesMutationService } from './modules/games/services/games-mutation/games-mutation.service';
+import { GamesQueryService } from './modules/games/services/games-query/games-query.service';
 import { PublisherResponseDto } from './modules/publisher/dtos/publisher-response.dto';
 import { PublisherQueryService } from './modules/publisher/services/publisher-query.service';
 import { PaginatedResponse } from './shared/generics/paginated-response.generic';
@@ -27,10 +29,10 @@ export class AppController {
   ) {}
 
   @Get()
-  findMany(
+  findAllPaginated(
     @Query() filters: GameFindManyRequestDto,
   ): Promise<PaginatedResponse<GameResponseDto>> {
-    return this.gamesQueryService.findManyPaginated(filters);
+    return this.gamesQueryService.findAllPaginated(filters);
   }
 
   @Get(':id')
@@ -49,6 +51,7 @@ export class AppController {
   }
 
   @Patch(':id')
+  @UsePipes(IsGameExistsPipe)
   updateOne(
     @Param() id: number,
     @Body() dto: GameUpdateDto,
@@ -57,6 +60,7 @@ export class AppController {
   }
 
   @Delete(':id')
+  @UsePipes(IsGameExistsPipe)
   async deleteOne(@Param() id: number): Promise<OkResponse> {
     await this.gamesMutationService.deleteOne(id);
     return new OkResponse();

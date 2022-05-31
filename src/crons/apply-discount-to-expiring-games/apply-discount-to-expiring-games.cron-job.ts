@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { EnvironmentVariables } from '../../config/env.validation';
-import { GamesApplyDiscountService } from '../../modules/games/services/games-apply-discount.service';
+import { GamesApplyDiscountService } from '../../modules/games/services/games-apply-discount/games-apply-discount.service';
 
 @Injectable()
 export class ApplyDiscountToExpiringGamesCronJob {

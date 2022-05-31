@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { EnvironmentVariables } from '../../../config/env.validation';
-import { dateBeforeMonths } from '../../../shared/utils/date-before.util';
-import { GameResponseDto } from '../dtos/game-response.dto';
-import { GamesRepository } from '../games.repository';
+import { EnvironmentVariables } from '../../../../config/env.validation';
+import { dateBeforeMonths } from '../../../../shared/utils/date-before/date-before.util';
+import { GameResponseDto } from '../../dtos/game-response.dto';
+import { GamesRepository } from '../../games.repository';
 
 @Injectable()
 export class GamesDeleteOldService {

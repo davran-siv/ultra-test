@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { GameCreateDto } from '../dtos/game-create.dto';
-import { GameResponseDto } from '../dtos/game-response.dto';
-import { GameUpdateDto } from '../dtos/game-update.dto';
-import { GamesRepository } from '../games.repository';
-import { GamesQueryService } from './games-query.service';
+import { GameCreateDto } from '../../dtos/game-create.dto';
+import { GameResponseDto } from '../../dtos/game-response.dto';
+import { GameUpdateDto } from '../../dtos/game-update.dto';
+import { GamesRepository } from '../../games.repository';
+import { GamesQueryService } from '../games-query/games-query.service';
 
 @Injectable()
 export class GamesMutationService {

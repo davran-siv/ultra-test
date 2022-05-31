@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { Cron, SchedulerRegistry } from '@nestjs/schedule';
 import { CronExpression } from '@nestjs/schedule/dist/enums/cron-expression.enum';
 import { EnvironmentVariables } from '../../config/env.validation';
-import { GamesDeleteOldService } from '../../modules/games/services/games-delete-old.service';
+import { GamesDeleteOldService } from '../../modules/games/services/games-delete-old/games-delete-old.service';
 
 @Injectable()
 export class DeleteOldGamesCronJob {

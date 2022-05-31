@@ -65,4 +65,8 @@ export class GamesRepository {
   async deleteManyByIds(ids: number[]): Promise<void> {
     return;
   }
+
+  async isExistsById(id: number): Promise<boolean> {
+    return true;
+  }
 }
