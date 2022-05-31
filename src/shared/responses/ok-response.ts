@@ -1,0 +1,3 @@
+class OkResponse {
+  status: 'ok';
+}
