@@ -28,12 +28,13 @@ export class GamesRepository {
   async updateOne(id: number, dto: GameUpdateDto): Promise<GameResponseDto> {
     return {
       ...mockGame,
+      id,
       ...dto,
     };
   }
 
   async findOneById(id: number): Promise<GameResponseDto | undefined> {
-    return mockGame;
+    return { ...mockGame, id };
   }
   async findManyPaginated(
     filters: GameFindManyRequestDto,
