@@ -1,9 +1,17 @@
-import { IsNumber, IsOptional } from 'class-validator';
+import { IsDate, IsNumber, IsOptional } from 'class-validator';
 
 export class GameFindManyRequestDto {
   @IsNumber({}, { each: true })
   @IsOptional()
-  id?: number[];
+  ids?: number[];
+
+  @IsDate()
+  @IsOptional()
+  publishedFrom?: Date;
+
+  @IsDate()
+  @IsOptional()
+  publishedBefore?: Date;
 
   @IsNumber({}, { each: true })
   @IsOptional()

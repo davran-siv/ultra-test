@@ -33,10 +33,17 @@ export class GamesRepository {
     };
   }
 
+  // TODO proper response
+  async updateMany(
+    dtos: (GameUpdateDto & { id: number })[],
+  ): Promise<GameResponseDto[]> {
+    return [mockGame];
+  }
+
   async findOneById(id: number): Promise<GameResponseDto | undefined> {
     return { ...mockGame, id };
   }
-  async findManyPaginated(
+  async findAllPaginated(
     filters: GameFindManyRequestDto,
   ): Promise<PaginatedResponse<GameResponseDto>> {
     return {
@@ -45,7 +52,9 @@ export class GamesRepository {
     };
   }
 
-  async findAllOlderThen(getOlderThen: Date): Promise<GameResponseDto[]> {
+  async findAll(
+    filters: Omit<GameFindManyRequestDto, 'page' | 'perPage'>,
+  ): Promise<GameResponseDto[]> {
     return [mockGame];
   }
 

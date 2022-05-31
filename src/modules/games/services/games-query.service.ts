@@ -21,7 +21,7 @@ export class GamesQueryService {
   async findManyPaginated(
     filters: GameFindManyRequestDto,
   ): Promise<PaginatedResponse<GameResponseDto>> {
-    return this.repository.findManyPaginated(filters);
+    return this.repository.findAllPaginated(filters);
   }
 
   findOneById(id: number): Promise<GameResponseDto | undefined> {

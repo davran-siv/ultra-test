@@ -32,7 +32,16 @@ export class EnvironmentVariables {
   DB_PASSWORD: string;
 
   @IsNumber()
-  REMOVE_GAMES_OLDER_THAN_IN_MONTHS: number;
+  REMOVE_GAMES_PUBLISHED_MORE_THAN_MONTHS_AGO: number;
+
+  @IsNumber()
+  APPLY_DISCOUNT_TO_GAMES_PUBLISHED_MORE_THAN_MONTHS_AGO: number;
+
+  @IsNumber()
+  APPLY_DISCOUNT_TO_GAMES_PUBLISHED_LESS_THAN_MONTHS_AGO: number;
+
+  @IsNumber()
+  DISCOUNT_TO_EXPIRING_GAMES: number;
 }
 
 export function validate(config: Record<string, unknown>) {

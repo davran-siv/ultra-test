@@ -3,21 +3,21 @@ import { IsNumber, IsOptional, IsString } from 'class-validator';
 export class GameUpdateDto {
   @IsString()
   @IsOptional()
-  title: string;
+  title?: string;
 
   @IsNumber()
   @IsOptional()
-  price: number;
+  price?: number;
 
   @IsNumber()
   @IsOptional()
-  publisherId: number;
+  publisherId?: number;
 
   @IsNumber()
   @IsOptional()
-  tags: string[];
+  tags?: string[];
 
   @IsNumber()
   @IsOptional()
-  releaseDate: Date;
+  releaseDate?: Date;
 }

@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables } from '../../../config/env.validation';
+import { dateBeforeMonths } from '../../../shared/utils/date-before.util';
 import { GameResponseDto } from '../dtos/game-response.dto';
 import { GamesRepository } from '../games.repository';
 
@@ -23,14 +24,11 @@ export class GamesDeleteOldService {
 
   getOldGames(): Promise<GameResponseDto[]> {
     const olderThan = this.configService.get(
-      'REMOVE_GAMES_OLDER_THAN_IN_MONTHS',
+      'REMOVE_GAMES_PUBLISHED_MORE_THAN_MONTHS_AGO',
     );
 
-    const currentDate = new Date();
+    const publishedBefore = dateBeforeMonths(olderThan);
 
-    const publishedBefore = new Date(
-      currentDate.setMonth(currentDate.getMonth() - olderThan),
-    );
-    return this.gamesRepository.findAllOlderThen(publishedBefore);
+    return this.gamesRepository.findAll({ publishedBefore });
   }
 }

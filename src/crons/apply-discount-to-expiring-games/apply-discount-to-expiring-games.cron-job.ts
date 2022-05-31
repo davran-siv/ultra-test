@@ -1,16 +1,17 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Cron, SchedulerRegistry } from '@nestjs/schedule';
-import { CronExpression } from '@nestjs/schedule/dist/enums/cron-expression.enum';
+import { SchedulerRegistry } from '@nestjs/schedule';
 import { EnvironmentVariables } from '../../config/env.validation';
-import { GamesDeleteOldService } from '../../modules/games/services/games-delete-old.service';
+import { GamesApplyDiscountService } from '../../modules/games/services/games-apply-discount.service';
 
 @Injectable()
-export class DeleteOldGamesCronJob {
-  private readonly logger = new Logger(DeleteOldGamesCronJob.name);
+export class ApplyDiscountToExpiringGamesCronJob {
+  private readonly logger = new Logger(
+    ApplyDiscountToExpiringGamesCronJob.name,
+  );
 
   constructor(
-    private readonly gamesDeleteOldService: GamesDeleteOldService,
+    private readonly gamesApplyDiscountService: GamesApplyDiscountService,
     private readonly configService: ConfigService<EnvironmentVariables, true>,
     private readonly schedulerRegistry: SchedulerRegistry,
   ) {}
@@ -27,12 +28,11 @@ export class DeleteOldGamesCronJob {
     }
   }
 
-  @Cron(CronExpression.EVERY_DAY_AT_1AM, { name: 'runDeleteOldGamesCronJob' })
-  async run() {
-    this.logger.log(`Cron Job started`);
+  async run(): Promise<void> {
+    this.logger.log('Cron Job started');
     try {
-      await this.gamesDeleteOldService.findAndDelete();
-      this.logger.log(`Cron Job finished`);
+      await this.gamesApplyDiscountService.addDiscountToExpiringGames();
+      this.logger.log('Cron Job finished');
     } catch (error) {
       this.logger.error(`Failed to execute. Error: ${JSON.stringify(error)}`);
     }
