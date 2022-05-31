@@ -23,6 +23,6 @@ export class GamesMutationService {
   }
 
   async deleteOne(id: number): Promise<void> {
-    await this.repository.deleteOne(id);
+    await this.repository.deleteOneById(id);
   }
 }

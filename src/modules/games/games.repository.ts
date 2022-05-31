@@ -44,7 +44,15 @@ export class GamesRepository {
     };
   }
 
-  async deleteOne(id: number): Promise<GameResponseDto> {
+  async findAllOlderThen(getOlderThen: Date): Promise<GameResponseDto[]> {
+    return [mockGame];
+  }
+
+  async deleteOneById(id: number): Promise<void> {
+    return;
+  }
+
+  async deleteManyByIds(ids: number[]): Promise<void> {
     return;
   }
 }
