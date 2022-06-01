@@ -1,3 +1,4 @@
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test } from '@nestjs/testing';
 import { GamesRepository } from '../../games.repository';
 import { GamesQueryService } from '../games-query/games-query.service';
@@ -9,10 +10,16 @@ describe('GamesMutationService', () => {
   const updateOneMock = jest.fn();
   const deleteOneByIdMock = jest.fn();
   const getOneByIdMock = jest.fn();
+  const eventEmitMock = jest.fn();
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [GamesQueryService, GamesRepository, GamesMutationService],
+      providers: [
+        GamesQueryService,
+        GamesRepository,
+        GamesMutationService,
+        EventEmitter2,
+      ],
     })
       .overrideProvider(GamesRepository)
       .useValue({
@@ -22,6 +29,10 @@ describe('GamesMutationService', () => {
       })
       .overrideProvider(GamesQueryService)
       .useValue({ getOneById: getOneByIdMock })
+      .overrideProvider(EventEmitter2)
+      .useValue({
+        emit: eventEmitMock,
+      })
       .compile();
 
     gamesMutationService = moduleRef.get(GamesMutationService);
@@ -66,6 +77,7 @@ describe('GamesMutationService', () => {
       const game = await gamesMutationService.updateOne(gameId, gameToUpdate);
       expect(updateOneMock).toBeCalledTimes(1);
       expect(getOneByIdMock).toBeCalledTimes(1);
+      expect(eventEmitMock).toBeCalledTimes(1);
       expect(game).toEqual({ id: gameId, ...gameToUpdate });
     });
   });

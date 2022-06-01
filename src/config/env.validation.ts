@@ -1,11 +1,5 @@
 import { plainToClass } from 'class-transformer';
-import {
-  IsDate,
-  IsNumber,
-  IsOptional,
-  IsString,
-  validateSync,
-} from 'class-validator';
+import { IsNumber, IsOptional, IsString, validateSync } from 'class-validator';
 
 export class EnvironmentVariables {
   @IsString()

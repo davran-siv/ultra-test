@@ -13,11 +13,11 @@ import { GameCreateDto } from './modules/games/dtos/game-create.dto';
 import { GameFindManyRequestDto } from './modules/games/dtos/game-find-many-request.dto';
 import { GameResponseDto } from './modules/games/dtos/game-response.dto';
 import { GameUpdateDto } from './modules/games/dtos/game-update.dto';
-import { IsGameExistsPipe } from './modules/games/interceptors/is-game-exists.pipe';
+import { IsGameExistsPipe } from './modules/games/pipes/is-game-exists.pipe';
 import { GamesMutationService } from './modules/games/services/games-mutation/games-mutation.service';
 import { GamesQueryService } from './modules/games/services/games-query/games-query.service';
-import { PublisherResponseDto } from './modules/publisher/dtos/publisher-response.dto';
-import { PublisherQueryService } from './modules/publisher/services/publisher-query.service';
+import { PublishersResponseDto } from './modules/publisher/dtos/publishers-response.dto';
+import { PublishersQueryService } from './modules/publisher/services/publishers-query.service';
 import { PaginatedResponse } from './shared/generics/paginated-response.generic';
 
 @Controller({ version: 'v1' })
@@ -25,7 +25,7 @@ export class AppController {
   constructor(
     private readonly gamesMutationService: GamesMutationService,
     private readonly gamesQueryService: GamesQueryService,
-    private readonly publisherQueryService: PublisherQueryService,
+    private readonly publisherQueryService: PublishersQueryService,
   ) {}
 
   @Get()
@@ -41,7 +41,9 @@ export class AppController {
   }
 
   @Get(':id/publisher')
-  getGamePublisherById(@Param('id') id: number): Promise<PublisherResponseDto> {
+  getGamePublisherById(
+    @Param('id') id: number,
+  ): Promise<PublishersResponseDto> {
     return this.publisherQueryService.getOneByGameId(id);
   }
 

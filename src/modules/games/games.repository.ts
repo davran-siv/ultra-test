@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { PaginatedResponse } from '../../shared/generics/paginated-response.generic';
 import { GameCreateDto } from './dtos/game-create.dto';
 import { GameFindManyRequestDto } from './dtos/game-find-many-request.dto';
 import { GameResponseDto } from './dtos/game-response.dto';
 import { GameUpdateDto } from './dtos/game-update.dto';
+import { GamesEntity } from './games.entity';
 
 const mockGame = {
   id: 1,
@@ -16,6 +19,10 @@ const mockGame = {
 
 @Injectable()
 export class GamesRepository {
+  constructor(
+    @InjectRepository(GamesEntity)
+    private gamesEntityRepository: Repository<GamesEntity>,
+  ) {}
   // TODO proper response
   async createOne(dto: GameCreateDto): Promise<GameResponseDto> {
     return {

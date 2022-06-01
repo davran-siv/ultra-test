@@ -1,30 +1,25 @@
-import { ConfigService } from '@nestjs/config'
-import { SnakeNamingStrategy } from './src/shared/repository/snake-naming-steategy'
-import { TypeOrmLoggerContainer } from './src/shared/repository/type-orm-logger-container'
+import { ConfigService } from '@nestjs/config';
+import { EnvironmentVariables } from './src/config/env.validation';
+import { GamesEntity } from './src/modules/games/games.entity';
+import { SnakeNamingStrategy } from './src/shared/repositry/snake-naming-steategy/snake-naming-steategy';
 
-// This file needs for NestJS
-const type: any = 'postgres'
+const type: any = 'postgres';
 
-const typeormConfigAsync = (config: ConfigService) => ({
+const typeormConfigAsync = (
+  config: ConfigService<EnvironmentVariables, true>,
+) => ({
   type,
-  host: config.get('PG_HOST'),
-  port: config.get('PG_PORT'),
-  username: config.get('PG_USER'),
-  password: config.get('PG_PASSWORD'),
-  database: config.get('PG_DATABASE'),
-  entities: ['dist/**/*.entity.js'],
-  migrations: ['dist/migrations/*.js'],
+  host: 'localhost',
+  port: config.get('DB_PORT'),
+  username: config.get('DB_USERNAME'),
+  password: config.get<string>('DB_PASSWORD'),
+  database: config.get('DB_NAME'),
   synchronize: false,
   logging: true,
-  uuidExtension: 'uuid-ossp',
-  cli: {
-    migrationsDir: 'migrations',
-  },
-  logger: TypeOrmLoggerContainer.ForConnection(
-    'default',
-    ['error'],
-  ),
   namingStrategy: new SnakeNamingStrategy(),
-})
+  autoLoadEntities: true,
+  migrations: ['src/migrations/**/*{.ts,.js}'],
+  subscribers: ['src/subscriber/**/*{.ts,.js}'],
+});
 
-export default typeormConfigAsync
+export default typeormConfigAsync;

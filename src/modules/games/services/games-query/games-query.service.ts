@@ -27,4 +27,8 @@ export class GamesQueryService {
   findOneById(id: number): Promise<GameResponseDto | undefined> {
     return this.repository.findOneById(id);
   }
+
+  isExistsById(id: number): Promise<boolean> {
+    return this.repository.isExistsById(id);
+  }
 }

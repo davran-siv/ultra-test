@@ -1,24 +1,18 @@
-// This file needs for TypeORM CLI like running/reverting migrations
+import { DataSource } from 'typeorm';
+import { SnakeNamingStrategy } from './src/shared/repositry/snake-naming-steategy/snake-naming-steategy';
 
-import { SnakeNamingStrategy } from './src/shared/repositry/snake-naming-steategy';
-
-const type: any = 'postgres';
-const typeormConfig = {
-  type,
-  host: process.env.PG_HOST,
-  port: process.env.PG_PORT,
-  username: process.env.PG_USER,
-  password: process.env.PG_PASSWORD,
-  database: process.env.PG_DATABASE,
-  entities: ['dist/**/*.entity.js'],
-  migrations: ['dist/migrations/*.js'],
+const typeormConfig = new DataSource({
+  type: 'postgres',
+  host: 'localhost',
+  port: Number(process.env.DB_PORT),
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
   synchronize: false,
   logging: false,
-  uuidExtension: 'uuid-ossp',
-  cli: {
-    migrationsDir: 'migrations',
-  },
   namingStrategy: new SnakeNamingStrategy(),
-};
-// export default breaks migrations https://github.com/typeorm/typeorm/issues/5003
-export = typeormConfig;
+  entities: ['src/**/**.entity{.ts,.js}'],
+  migrations: ['migrations/**/*{.ts,.js}'],
+});
+
+export default typeormConfig;

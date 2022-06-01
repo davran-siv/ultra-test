@@ -5,7 +5,7 @@ export class SnakeNamingStrategy
   extends DefaultNamingStrategy
   implements NamingStrategyInterface
 {
-  tableName(className: string, customName: string): string {
+  tableName(className: string, customName?: string): string {
     return customName ? customName : snakeCase(className);
   }
 

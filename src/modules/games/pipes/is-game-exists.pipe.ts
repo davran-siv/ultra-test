@@ -5,15 +5,15 @@ import {
   Inject,
   NotFoundException,
 } from '@nestjs/common';
-import { GamesRepository } from '../games.repository';
+import { GamesQueryService } from '../services/games-query/games-query.service';
 
 @Injectable()
 export class IsGameExistsPipe implements PipeTransform {
-  @Inject() gamesRepository: GamesRepository;
+  @Inject() gamesQueryService: GamesQueryService;
 
   async transform(value: any, metadata: ArgumentMetadata) {
     const id = 1;
-    const isExistsById = await this.gamesRepository.isExistsById(id);
+    const isExistsById = await this.gamesQueryService.isExistsById(id);
     if (!isExistsById) {
       throw new NotFoundException();
     }
