@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { GameUpdatedEvent } from '../../cqrs/event/game-updated.event';
 import { GameCreateDto } from '../../dtos/game-create.dto';
 import { GameResponseDto } from '../../dtos/game-response.dto';
 import { GameUpdateDto } from '../../dtos/game-update.dto';
@@ -10,6 +12,7 @@ export class GamesMutationService {
   constructor(
     private readonly repository: GamesRepository,
     private readonly gamesQueryService: GamesQueryService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async createOne(dto: GameCreateDto): Promise<GameResponseDto> {
@@ -19,6 +22,7 @@ export class GamesMutationService {
 
   async updateOne(id: number, dto: GameUpdateDto): Promise<GameResponseDto> {
     await this.repository.updateOne(id, dto);
+    this.eventEmitter.emit(GameUpdatedEvent.name, new GameUpdatedEvent({ id }));
     return this.gamesQueryService.getOneById(id);
   }
 

@@ -14,21 +14,34 @@ export class GamesDeleteOutdatedService {
     private readonly configService: ConfigService<EnvironmentVariables, true>,
   ) {}
 
-  async findAndDelete(): Promise<void> {
+  async findAndDelete(ids?: number[]): Promise<void> {
     this.logger.log('Running process');
-    const gamesToRemove = await this.getOutdatedGames();
-    const gameIdsToRemove = gamesToRemove.map(({ id }) => id);
-    await this.gamesRepository.deleteManyByIds(gameIdsToRemove);
+    const gamesToRemove = await this.getOutdatedGames(ids);
+    if (gamesToRemove.length) {
+      const gameIdsToRemove = gamesToRemove.map(({ id }) => id);
+      await this.gamesRepository.deleteManyByIds(gameIdsToRemove);
+    }
     this.logger.log('Finished process');
   }
 
-  getOutdatedGames(): Promise<GameResponseDto[]> {
+  async getOutdatedGames(ids?: number[]): Promise<GameResponseDto[]> {
     const olderThan = this.configService.get(
       'REMOVE_GAMES_PUBLISHED_MORE_THAN_MONTHS_AGO',
     );
 
     const publishedBefore = dateBeforeMonths(olderThan);
 
-    return this.gamesRepository.findAll({ publishedBefore });
+    const outdatedGames = await this.gamesRepository.findAll({
+      publishedBefore,
+      ids,
+    });
+
+    this.logger.log(
+      `[getOutdatedGames] Found ${
+        outdatedGames.length
+      } game(s) with ids: ${outdatedGames.map(({ id }) => id)}`,
+    );
+
+    return outdatedGames;
   }
 }

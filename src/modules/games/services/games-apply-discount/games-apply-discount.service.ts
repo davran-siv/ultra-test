@@ -15,24 +15,27 @@ export class GamesApplyDiscountService {
     private readonly configService: ConfigService<EnvironmentVariables, true>,
   ) {}
 
-  async addDiscountToExpiringGames(): Promise<void> {
+  async addDiscountToExpiringGames(ids?: number[]): Promise<void> {
     this.logger.log('Process running');
     const discountToExpiringGames = this.configService.get(
       'DISCOUNT_TO_EXPIRING_GAMES',
     );
 
-    const expiringGames = await this.getExpiringGames();
+    const expiringGames = await this.getExpiringGames(ids);
 
-    const gamesWithUpdatedPrice = expiringGames.map(({ id, price }) => ({
-      id,
-      price: percentageOff(price, discountToExpiringGames),
-    }));
+    if (expiringGames.length) {
+      const gamesWithUpdatedPrice = expiringGames.map(({ id, price }) => ({
+        id,
+        price: percentageOff(price, discountToExpiringGames),
+      }));
 
-    await this.gamesRepository.updateMany(gamesWithUpdatedPrice);
+      await this.gamesRepository.updateMany(gamesWithUpdatedPrice);
+    }
+
     this.logger.log('Process successfully finished');
   }
 
-  async getExpiringGames(): Promise<GameResponseDto[]> {
+  async getExpiringGames(ids?: number[]): Promise<GameResponseDto[]> {
     const publishedMoreThen = this.configService.get(
       'APPLY_DISCOUNT_TO_GAMES_PUBLISHED_MORE_THAN_MONTHS_AGO',
     );
@@ -46,11 +49,12 @@ export class GamesApplyDiscountService {
     const expiringGames = await this.gamesRepository.findAll({
       publishedBefore,
       publishedFrom,
+      ids,
     });
     this.logger.log(
-      `Found ${expiringGames.length} game(s) with ids: ${expiringGames.map(
-        ({ id }) => id,
-      )}`,
+      `[getExpiringGames] Found ${
+        expiringGames.length
+      } game(s) with ids: ${expiringGames.map(({ id }) => id)}`,
     );
     return expiringGames;
   }
