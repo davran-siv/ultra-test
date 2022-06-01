@@ -1,26 +1,28 @@
-import { ValueTransformer } from 'typeorm/decorator/options/ValueTransformer'
-import { isNullOrUndefined } from '../../utils'
+import { ValueTransformer } from 'typeorm/decorator/options/ValueTransformer';
+import { isNullOrUndefined } from '../utils/variable-type/variable-type.util';
 
 export class NumericColumnTransformer implements ValueTransformer {
   to(value?: number | null): number | null | undefined {
-    return value
+    return value;
   }
 
   from(value?: string | null): number | null | undefined {
     if (isNullOrUndefined(value)) {
-      return value
+      return value;
     }
-    const res = parseFloat(value)
-    return isNaN(res) ? null : res
+    const res = parseFloat(value);
+    return isNaN(res) ? null : res;
   }
 }
 
-export const convertAllDataToNumeric = <T, K extends keyof T>(data: T): Record<K, number> => {
-  const transformer = new NumericColumnTransformer
+export const convertAllDataToNumeric = <T, K extends keyof T>(
+  data: T,
+): Record<K, number> => {
+  const transformer = new NumericColumnTransformer();
   return Object.entries(data).reduce((acc, [key, value]) => {
     return {
       ...acc,
       [key]: transformer.from(value),
-    }
-  }, {}) as Record<K, number>
-}
+    };
+  }, {}) as Record<K, number>;
+};
