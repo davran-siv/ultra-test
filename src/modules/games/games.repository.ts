@@ -23,36 +23,29 @@ export class GamesRepository {
     @InjectRepository(GamesEntity)
     private gamesEntityRepository: Repository<GamesEntity>,
   ) {}
-  // TODO proper response
-  async createOne(dto: GameCreateDto): Promise<GameResponseDto> {
-    return {
-      ...mockGame,
-      ...dto,
-    };
+
+  async createOne(dto: GameCreateDto): Promise<Omit<GamesEntity, 'publisher'>> {
+    return this.gamesEntityRepository.create(dto);
   }
 
-  // TODO proper response
-  async updateOne(id: number, dto: GameUpdateDto): Promise<GameResponseDto> {
-    return {
-      ...mockGame,
-      id,
-      ...dto,
-    };
+  async updateOne(id: number, dto: GameUpdateDto): Promise<void> {
+    await this.gamesEntityRepository.update(id, dto);
   }
 
-  // TODO proper response
-  async updateMany(
-    dtos: (GameUpdateDto & { id: number })[],
-  ): Promise<GameResponseDto[]> {
-    return [mockGame];
+  async updateMany(dtos: (GameUpdateDto & { id: number })[]): Promise<void> {
+    await this.gamesEntityRepository.save(dtos);
   }
 
-  async findOneById(id: number): Promise<GameResponseDto | undefined> {
-    return { ...mockGame, id };
+  async findOneById(
+    id: number,
+  ): Promise<Omit<GamesEntity, 'publisher'> | undefined> {
+    return this.gamesEntityRepository.findOneBy({ id });
   }
   async findAllPaginated(
     filters: GameFindManyRequestDto,
   ): Promise<PaginatedResponse<GameResponseDto>> {
+    // return this.gamesEntityRepository.findAndCountBy({ id });
+
     return {
       items: [mockGame],
       totalCount: 1,
@@ -66,14 +59,15 @@ export class GamesRepository {
   }
 
   async deleteOneById(id: number): Promise<void> {
-    return;
+    await this.gamesEntityRepository.softDelete(id);
   }
 
   async deleteManyByIds(ids: number[]): Promise<void> {
-    return;
+    await this.gamesEntityRepository.softDelete(ids);
   }
 
   async isExistsById(id: number): Promise<boolean> {
-    return true;
+    const count = await this.gamesEntityRepository.countBy({ id });
+    return count > 0;
   }
 }
