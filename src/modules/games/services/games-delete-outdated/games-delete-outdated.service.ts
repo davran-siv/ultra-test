@@ -6,8 +6,8 @@ import { GameResponseDto } from '../../dtos/game-response.dto';
 import { GamesRepository } from '../../games.repository';
 
 @Injectable()
-export class GamesDeleteOldService {
-  private readonly logger = new Logger(GamesDeleteOldService.name);
+export class GamesDeleteOutdatedService {
+  private readonly logger = new Logger(GamesDeleteOutdatedService.name);
 
   constructor(
     private readonly gamesRepository: GamesRepository,
@@ -16,13 +16,13 @@ export class GamesDeleteOldService {
 
   async findAndDelete(): Promise<void> {
     this.logger.log('Running process');
-    const gamesToRemove = await this.getOldGames();
+    const gamesToRemove = await this.getOutdatedGames();
     const gameIdsToRemove = gamesToRemove.map(({ id }) => id);
     await this.gamesRepository.deleteManyByIds(gameIdsToRemove);
     this.logger.log('Finished process');
   }
 
-  getOldGames(): Promise<GameResponseDto[]> {
+  getOutdatedGames(): Promise<GameResponseDto[]> {
     const olderThan = this.configService.get(
       'REMOVE_GAMES_PUBLISHED_MORE_THAN_MONTHS_AGO',
     );

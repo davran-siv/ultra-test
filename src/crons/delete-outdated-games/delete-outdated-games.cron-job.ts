@@ -3,14 +3,14 @@ import { ConfigService } from '@nestjs/config';
 import { Cron, SchedulerRegistry } from '@nestjs/schedule';
 import { CronExpression } from '@nestjs/schedule/dist/enums/cron-expression.enum';
 import { EnvironmentVariables } from '../../config/env.validation';
-import { GamesDeleteOldService } from '../../modules/games/services/games-delete-old/games-delete-old.service';
+import { GamesDeleteOutdatedService } from '../../modules/games/services/games-delete-outdated/games-delete-outdated.service';
 
 @Injectable()
-export class DeleteOldGamesCronJob {
-  private readonly logger = new Logger(DeleteOldGamesCronJob.name);
+export class DeleteOutdatedGamesCronJob {
+  private readonly logger = new Logger(DeleteOutdatedGamesCronJob.name);
 
   constructor(
-    private readonly gamesDeleteOldService: GamesDeleteOldService,
+    private readonly gamesDeleteOldService: GamesDeleteOutdatedService,
     private readonly configService: ConfigService<EnvironmentVariables, true>,
     private readonly schedulerRegistry: SchedulerRegistry,
   ) {}
@@ -27,7 +27,9 @@ export class DeleteOldGamesCronJob {
     }
   }
 
-  @Cron(CronExpression.EVERY_DAY_AT_1AM, { name: 'runDeleteOldGamesCronJob' })
+  @Cron(CronExpression.EVERY_DAY_AT_1AM, {
+    name: 'runDeleteOutdatedGamesCronJob',
+  })
   async run() {
     this.logger.log(`Cron Job started`);
     try {

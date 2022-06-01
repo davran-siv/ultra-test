@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { SchedulerRegistry } from '@nestjs/schedule';
+import { Cron, SchedulerRegistry } from '@nestjs/schedule';
+import { CronExpression } from '@nestjs/schedule/dist/enums/cron-expression.enum';
 import { EnvironmentVariables } from '../../config/env.validation';
 import { GamesApplyDiscountService } from '../../modules/games/services/games-apply-discount/games-apply-discount.service';
 
@@ -21,13 +22,16 @@ export class ApplyDiscountToExpiringGamesCronJob {
     if (nodeEnv !== 'production') {
       this.logger.log(`Cron Jobs will be stopped. NODE_ENV is ${nodeEnv}`);
       const runBalancersJob = this.schedulerRegistry.getCronJob(
-        'runDeleteOldGamesCronJob',
+        'applyDiscountToExpiringGamesCronJob',
       );
 
       runBalancersJob && runBalancersJob.stop();
     }
   }
 
+  @Cron(CronExpression.EVERY_DAY_AT_2AM, {
+    name: 'applyDiscountToExpiringGamesCronJob',
+  })
   async run(): Promise<void> {
     this.logger.log('Cron Job started');
     try {
