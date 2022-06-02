@@ -20,7 +20,7 @@ interface GameCreateSeed {
 
 export interface GameSeedManager {
   create: (props: GameCreateSeed) => Promise<{ id }>;
-  clearTable: () => Promise<void>;
+  softDeleteOneById: (id: number) => Promise<void>;
   findById: (id: number) => Promise<GameRawEntity>;
 }
 
@@ -41,8 +41,14 @@ const gameCreateSeed = async (
   return game;
 };
 
-const gameClearTable = async (manager: EntityManager): Promise<void> => {
-  await manager.query(`DELETE FROM public.games`);
+const softDeleteOneById = async (
+  manager: EntityManager,
+  id: number,
+): Promise<void> => {
+  await manager.query(
+    `UPDATE public.games SET deleted_at = now() WHERE id = $1`,
+    [id],
+  );
 };
 
 const findById = async (
@@ -58,6 +64,6 @@ const findById = async (
 
 export const gameSeedManager = (manager: EntityManager): GameSeedManager => ({
   create: (props: GameCreateSeed) => gameCreateSeed(manager, props),
-  clearTable: () => gameClearTable(manager),
+  softDeleteOneById: (id: number) => softDeleteOneById(manager, id),
   findById: (id: number) => findById(manager, id),
 });

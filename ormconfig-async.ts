@@ -12,14 +12,12 @@ const typeormConfigAsync = (
   host: config.get('DB_HOST'),
   port: config.get('DB_PORT'),
   username: config.get('DB_USERNAME'),
-  password: config.get<string>('DB_PASSWORD'),
+  password: config.get('DB_PASSWORD'),
   database: config.get('DB_NAME'),
   synchronize: false,
   logging: false,
   namingStrategy: new SnakeNamingStrategy(),
   autoLoadEntities: true,
-  migrations: ['src/migrations/**/*{.ts,.js}'],
-  subscribers: ['src/subscriber/**/*{.ts,.js}'],
 });
 
 export default typeormConfigAsync;

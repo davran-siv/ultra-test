@@ -45,10 +45,11 @@ export class GamesRepository {
   async findAllPaginated(
     filters: GameFindManyRequestDto,
   ): Promise<PaginatedResponse<GamesEntity>> {
-    const offset = (filters.page - 1) * filters.perPage;
+    const perPage = filters.perPage ?? 10;
+    const offset = ((filters.page ?? 1) - 1) * perPage;
     const queryBuilder = this.getQueryBuilderForFetchingAll(filters);
     queryBuilder.offset(offset);
-    queryBuilder.take(filters.perPage);
+    queryBuilder.take(perPage);
     const [items, totalCount] = await queryBuilder.getManyAndCount();
 
     return {

@@ -103,6 +103,19 @@ describe('AppController (e2e)', () => {
     await publisherSeeder.deleteById(publisher.id);
   });
 
+  it('/ (GET)', async () => {
+    const publisher = await publisherSeeder.create();
+    await gameSeeder.create({ publisherId: publisher.id });
+    const { id } = await gameSeeder.create({ publisherId: publisher.id });
+    await gameSeeder.softDeleteOneById(id);
+
+    const { body } = await request(app.getHttpServer()).get('').expect(200);
+
+    expect(body.items).toBeDefined();
+    expect(body.totalCount).toBeDefined();
+    await publisherSeeder.deleteById(publisher.id);
+  });
+
   it('/:id/publisher (GET)', async () => {
     const publisher = await publisherSeeder.create();
     const { id } = await gameSeeder.create({ publisherId: publisher.id });
