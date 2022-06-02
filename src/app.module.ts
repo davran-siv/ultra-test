@@ -6,6 +6,7 @@ import { DataSource } from 'typeorm';
 import typeormConfigAsync from '../ormconfig-async';
 import { AppController } from './app.controller';
 import { validate } from './config/env.validation';
+import { CronJobsModule } from './crons/cron-jobs.module';
 import { Modules } from './modules/modules';
 
 @Module({
@@ -22,6 +23,7 @@ import { Modules } from './modules/modules';
       inject: [ConfigService],
       useFactory: typeormConfigAsync,
     }),
+    CronJobsModule,
   ],
   controllers: [AppController],
 })

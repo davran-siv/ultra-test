@@ -1,4 +1,11 @@
-import { IsDate, IsNumber, IsString, MinDate } from 'class-validator';
+import {
+  IsDate,
+  IsDateString,
+  IsNumber,
+  IsOptional,
+  IsString,
+  MinDate,
+} from 'class-validator';
 import { IsFeatureDate } from '../../../shared/validators/is-feature-date.validator';
 
 export class GameCreateDto {
@@ -11,10 +18,10 @@ export class GameCreateDto {
   @IsNumber()
   publisherId: number;
 
-  @IsNumber()
-  tags: string[];
+  @IsString({ each: true })
+  @IsOptional()
+  tags?: string[];
 
   @IsFeatureDate()
-  @IsDate()
   releaseDate: Date;
 }

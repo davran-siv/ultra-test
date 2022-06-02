@@ -3,7 +3,7 @@ import { SnakeNamingStrategy } from './src/shared/repositry/snake-naming-steateg
 
 const typeormConfig = new DataSource({
   type: 'postgres',
-  host: 'localhost',
+  host: process.env.DB_HOST,
   port: Number(process.env.DB_PORT),
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
@@ -12,7 +12,7 @@ const typeormConfig = new DataSource({
   logging: false,
   namingStrategy: new SnakeNamingStrategy(),
   entities: ['src/**/**.entity{.ts,.js}'],
-  migrations: ['migrations/**/*{.ts,.js}'],
+  migrations: ['migrations/*{.ts,.js}'],
 });
 
 export default typeormConfig;

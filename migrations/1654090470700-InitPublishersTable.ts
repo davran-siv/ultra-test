@@ -17,7 +17,7 @@ export class InitPublishersTable1654090470700 implements MigrationInterface {
           { name: 'name', type: 'varchar', length: '255' },
           { name: 'siret', type: 'int' },
           {
-            name: 'phome',
+            name: 'phone',
             length: '255',
             type: 'varchar',
           },

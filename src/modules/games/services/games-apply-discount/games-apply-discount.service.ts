@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables } from '../../../../config/env.validation';
+import calculateNumberFromPercentage from '../../../../shared/utils/calculate-number-from-percentage/calculate-number-from-percentage.util';
 import { dateBeforeMonths } from '../../../../shared/utils/date-before/date-before.util';
 import { percentageOff } from '../../../../shared/utils/percentage-off/percentage-off.util';
 import { GameResponseDto } from '../../dtos/game-response.dto';
@@ -21,12 +22,12 @@ export class GamesApplyDiscountService {
       'DISCOUNT_TO_EXPIRING_GAMES',
     );
 
-    const expiringGames = await this.getExpiringGames(ids);
+    const expiringGames = await this.getExpiringGamesWithoutDiscount(ids);
 
     if (expiringGames.length) {
       const gamesWithUpdatedPrice = expiringGames.map(({ id, price }) => ({
         id,
-        price: percentageOff(price, discountToExpiringGames),
+        discount: calculateNumberFromPercentage(price, discountToExpiringGames),
       }));
 
       await this.gamesRepository.updateMany(gamesWithUpdatedPrice);
@@ -35,7 +36,9 @@ export class GamesApplyDiscountService {
     this.logger.log('Process successfully finished');
   }
 
-  async getExpiringGames(ids?: number[]): Promise<GameResponseDto[]> {
+  async getExpiringGamesWithoutDiscount(
+    ids?: number[],
+  ): Promise<GameResponseDto[]> {
     const publishedMoreThen = this.configService.get(
       'APPLY_DISCOUNT_TO_GAMES_PUBLISHED_MORE_THAN_MONTHS_AGO',
     );
@@ -47,9 +50,10 @@ export class GamesApplyDiscountService {
     const publishedFrom = dateBeforeMonths(publishedLessThen);
 
     const expiringGames = await this.gamesRepository.findAll({
-      publishedBefore,
-      publishedFrom,
+      releasedBefore: publishedBefore,
+      releasedFrom: publishedFrom,
       ids,
+      isDiscountApplied: false,
     });
     this.logger.log(
       `[getExpiringGames] Found ${

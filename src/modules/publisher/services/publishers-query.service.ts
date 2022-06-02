@@ -19,4 +19,12 @@ export class PublishersQueryService {
   findOneByGameId(gameId: number): Promise<PublishersResponseDto | undefined> {
     return this.publisherRepository.findOneByGameId(gameId);
   }
+
+  async throwNotFoundIfNotExists(id: number): Promise<void> {
+    const isExits = await this.publisherRepository.isExistsById(id);
+    if (isExits) {
+      return;
+    }
+    throw new NotFoundException(`Publisher not exists by id: ${id}`);
+  }
 }

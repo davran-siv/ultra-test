@@ -9,7 +9,7 @@ services:
       - POSTGRES_DB=ultra
       - POSTGRES_USER=postgres
     ports:
-      - '5432:5432'
+      - '5433:5432'
     volumes:
       - ./data/database:/var/lib/postgresql/data
     networks:
@@ -27,6 +27,17 @@ services:
       - '/app/node_modules'
     ports:
       - 7000:7000
+    environment:
+      - APPLY_DISCOUNT_TO_GAMES_PUBLISHED_LESS_THAN_MONTHS_AGO=18
+      - APPLY_DISCOUNT_TO_GAMES_PUBLISHED_MORE_THAN_MONTHS_AGO=12
+      - DB_NAME=ultra
+      - DB_PASSWORD=root
+      - DB_PORT=5432
+      - DB_HOST=postgres
+      - DB_USERNAME=postgres
+      - DISCOUNT_TO_EXPIRING_GAMES=20
+      - REMOVE_GAMES_PUBLISHED_MORE_THAN_MONTHS_AGO=18
+      - SERVICE_PORT=7000
     networks:
       - webnet
 

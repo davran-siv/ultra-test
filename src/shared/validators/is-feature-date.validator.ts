@@ -2,6 +2,7 @@ import {
   registerDecorator,
   ValidationOptions,
   ValidationArguments,
+  isDateString,
 } from 'class-validator';
 
 export function IsFeatureDate(validationOptions?: ValidationOptions) {
@@ -14,10 +15,14 @@ export function IsFeatureDate(validationOptions?: ValidationOptions) {
       options: validationOptions,
       validator: {
         validate(value: any, args: ValidationArguments) {
-          if (!(value instanceof Date)) {
+          if (!isDateString(value)) {
             return false;
           }
-          return value > new Date();
+          const valueAsDate = new Date(value);
+          return valueAsDate > new Date();
+        },
+        defaultMessage(args: ValidationArguments) {
+          return `${args.property} must be a feature date`;
         },
       },
     });

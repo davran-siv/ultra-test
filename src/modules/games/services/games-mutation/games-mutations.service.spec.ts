@@ -1,5 +1,6 @@
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test } from '@nestjs/testing';
+import { PublishersQueryService } from '../../../publisher/services/publishers-query.service';
 import { GamesRepository } from '../../games.repository';
 import { GamesQueryService } from '../games-query/games-query.service';
 import { GamesMutationService } from './games-mutation.service';
@@ -19,6 +20,7 @@ describe('GamesMutationService', () => {
         GamesRepository,
         GamesMutationService,
         EventEmitter2,
+        PublishersQueryService,
       ],
     })
       .overrideProvider(GamesRepository)
@@ -32,6 +34,10 @@ describe('GamesMutationService', () => {
       .overrideProvider(EventEmitter2)
       .useValue({
         emit: eventEmitMock,
+      })
+      .overrideProvider(PublishersQueryService)
+      .useValue({
+        throwNotFoundIfNotExists: jest.fn(),
       })
       .compile();
 

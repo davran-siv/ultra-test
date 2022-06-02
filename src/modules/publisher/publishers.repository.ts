@@ -19,4 +19,9 @@ export class PublishersRepository {
       .leftJoin('publisher.games', 'game', 'game.id = :gameId', { gameId })
       .getOne();
   }
+
+  async isExistsById(id: number): Promise<boolean> {
+    const count = await this.publishersEntityRepository.countBy({ id });
+    return count > 0;
+  }
 }

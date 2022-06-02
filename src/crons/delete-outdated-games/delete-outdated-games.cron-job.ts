@@ -20,7 +20,7 @@ export class DeleteOutdatedGamesCronJob {
     if (nodeEnv !== 'production') {
       this.logger.log(`Cron Jobs will be stopped. NODE_ENV is ${nodeEnv}`);
       const runBalancersJob = this.schedulerRegistry.getCronJob(
-        'runDeleteOldGamesCronJob',
+        'runDeleteOutdatedGamesCronJob',
       );
 
       runBalancersJob && runBalancersJob.stop();

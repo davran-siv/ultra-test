@@ -1,3 +1,3 @@
-class OkResponse {
+export class OkResponse {
   status: 'ok';
 }

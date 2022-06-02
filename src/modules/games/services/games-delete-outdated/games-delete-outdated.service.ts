@@ -32,7 +32,7 @@ export class GamesDeleteOutdatedService {
     const publishedBefore = dateBeforeMonths(olderThan);
 
     const outdatedGames = await this.gamesRepository.findAll({
-      publishedBefore,
+      releasedBefore: publishedBefore,
       ids,
     });
 

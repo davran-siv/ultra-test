@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   Query,
   UsePipes,
 } from '@nestjs/common';
@@ -19,8 +20,9 @@ import { GamesQueryService } from './modules/games/services/games-query/games-qu
 import { PublishersResponseDto } from './modules/publisher/dtos/publishers-response.dto';
 import { PublishersQueryService } from './modules/publisher/services/publishers-query.service';
 import { PaginatedResponse } from './shared/generics/paginated-response.generic';
+import { OkResponse } from './shared/responses/ok-response';
 
-@Controller({ version: 'v1' })
+@Controller({ version: '1' })
 export class AppController {
   constructor(
     private readonly gamesMutationService: GamesMutationService,
@@ -52,18 +54,16 @@ export class AppController {
     return this.gamesMutationService.createOne(dto);
   }
 
-  @Patch(':id')
-  @UsePipes(IsGameExistsPipe)
+  @Put(':id')
   updateOne(
-    @Param() id: number,
+    @Param('id', IsGameExistsPipe) id: number,
     @Body() dto: GameUpdateDto,
   ): Promise<GameResponseDto> {
     return this.gamesMutationService.updateOne(id, dto);
   }
 
   @Delete(':id')
-  @UsePipes(IsGameExistsPipe)
-  async deleteOne(@Param() id: number): Promise<OkResponse> {
+  async deleteOne(@Param('id') id: number): Promise<OkResponse> {
     await this.gamesMutationService.deleteOne(id);
     return new OkResponse();
   }

@@ -1,4 +1,11 @@
-import { IsDate, IsNumber, IsOptional } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsNumber,
+  IsOptional,
+  Max,
+  Min,
+} from 'class-validator';
 
 export class GameFindManyRequestDto {
   @IsNumber({}, { each: true })
@@ -7,11 +14,15 @@ export class GameFindManyRequestDto {
 
   @IsDate()
   @IsOptional()
-  publishedFrom?: Date;
+  releasedFrom?: Date;
 
   @IsDate()
   @IsOptional()
-  publishedBefore?: Date;
+  releasedBefore?: Date;
+
+  @IsBoolean()
+  @IsOptional()
+  isDiscountApplied?: boolean;
 
   @IsNumber({}, { each: true })
   @IsOptional()
@@ -19,5 +30,7 @@ export class GameFindManyRequestDto {
 
   @IsNumber({}, { each: true })
   @IsOptional()
+  @Max(100)
+  @Min(1)
   perPage? = 10;
 }

@@ -19,12 +19,21 @@ export class GamesEntity {
 
   @Column({
     precision: 15,
-    scale: 3,
+    scale: 2,
     transformer: new NumericColumnTransformer(),
     nullable: false,
     type: 'numeric',
   })
   price: number;
+
+  @Column({
+    precision: 15,
+    scale: 2,
+    transformer: new NumericColumnTransformer(),
+    nullable: true,
+    type: 'numeric',
+  })
+  discount: number | null;
 
   @Column()
   publisherId: number;

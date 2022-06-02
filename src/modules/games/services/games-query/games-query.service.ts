@@ -12,7 +12,7 @@ export class GamesQueryService {
     const game = await this.findOneById(id);
 
     if (!game) {
-      throw new NotFoundException();
+      throw new NotFoundException(`Game not found by id: ${id}`);
     }
 
     return game;

@@ -15,11 +15,13 @@ export class InitGamesTable1654090749059 implements MigrationInterface {
             generationStrategy: 'increment',
           },
           { name: 'title', type: 'varchar', length: '255' },
-          { name: 'price', type: 'numeric(15, 5)' },
+          { name: 'price', type: 'numeric(15, 2)' },
+          { name: 'discount', type: 'numeric(15, 2)', isNullable: true },
           { name: 'publisher_id', type: 'int' },
           {
             name: 'tags',
             type: 'jsonb',
+            default: "'[]'",
           },
           {
             name: 'release_date',
